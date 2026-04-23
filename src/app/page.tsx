@@ -11,6 +11,7 @@ import {
   RotateCcw,
   Star,
 } from "lucide-react";
+import { SigninTrigger } from "./signin-modal";
 
 const CUSTOMER = "customer@test.com";
 const signinAs = (email: string) =>
@@ -79,12 +80,12 @@ export default async function HomePage() {
           <a href="#loyalty" className="hover:text-white transition">Loyalty</a>
           <a href="#visit" className="hover:text-white transition">Visit us</a>
         </div>
-        <Link
-          href={signinAs(CUSTOMER)}
+        <SigninTrigger
+          email={CUSTOMER}
           className="inline-flex items-center gap-1.5 h-9 px-4 rounded-full bg-white text-[#0e0a07] text-sm font-semibold hover:bg-white/90 transition"
         >
           Sign in <ArrowRight className="h-3.5 w-3.5" />
-        </Link>
+        </SigninTrigger>
       </nav>
 
       {/* ---------- Hero ---------- */}
@@ -118,12 +119,12 @@ export default async function HomePage() {
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3 items-center justify-center">
-            <Link
-              href={signinAs(CUSTOMER)}
+            <SigninTrigger
+              email={CUSTOMER}
               className="inline-flex items-center gap-2 h-12 px-8 rounded-full bg-[#c17e5c] hover:bg-[#b06f4e] text-white font-semibold transition shadow-[0_10px_30px_-10px_rgba(193,126,92,0.6)]"
             >
               Shop now <ArrowRight className="h-4 w-4" />
-            </Link>
+            </SigninTrigger>
             <a
               href="#beans"
               className="inline-flex items-center gap-2 h-12 px-7 rounded-full border border-white/30 hover:border-white/60 text-white font-medium transition backdrop-blur-sm"
@@ -173,12 +174,12 @@ export default async function HomePage() {
               Six drinks. <em className="italic text-[#e8bfa0]">Pulled right.</em>
             </h2>
           </div>
-          <Link
-            href={signinAs(CUSTOMER)}
+          <SigninTrigger
+            email={CUSTOMER}
             className="text-sm text-white/70 hover:text-white inline-flex items-center gap-1.5"
           >
             Order a cup <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
+          </SigninTrigger>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -210,20 +211,20 @@ export default async function HomePage() {
                 Roasted weekly, <em className="italic text-[#e8bfa0]">shipped next day.</em>
               </h2>
             </div>
-            <Link
-              href={signinAs(CUSTOMER)}
+            <SigninTrigger
+              email={CUSTOMER}
               className="text-sm text-white/70 hover:text-white inline-flex items-center gap-1.5"
             >
               Shop the full range <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
+            </SigninTrigger>
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {BEANS.map((b) => (
-              <Link
+              <SigninTrigger
                 key={b.name}
-                href={signinAs(CUSTOMER)}
-                className="group block rounded-2xl overflow-hidden border border-white/10 bg-[#0e0a07] hover:border-[#c17e5c]/40 transition"
+                email={CUSTOMER}
+                className="group block text-left rounded-2xl overflow-hidden border border-white/10 bg-[#0e0a07] hover:border-[#c17e5c]/40 transition"
               >
                 <div className="relative aspect-[4/3] bg-[#1c140e] overflow-hidden">
                   <Image
@@ -252,7 +253,7 @@ export default async function HomePage() {
                     Add to basket <ArrowRight className="h-3 w-3" />
                   </div>
                 </div>
-              </Link>
+              </SigninTrigger>
             ))}
           </div>
         </div>
@@ -303,12 +304,12 @@ export default async function HomePage() {
             </p>
 
             <div className="mt-8">
-              <Link
-                href={signinAs(CUSTOMER)}
+              <SigninTrigger
+                email={CUSTOMER}
                 className="inline-flex items-center gap-2 h-11 px-6 rounded-full bg-[#c17e5c] hover:bg-[#b06f4e] text-white font-semibold transition"
               >
                 Start collecting <ArrowRight className="h-4 w-4" />
-              </Link>
+              </SigninTrigger>
             </div>
           </div>
         </div>
@@ -341,12 +342,12 @@ export default async function HomePage() {
           </div>
 
           <div className="mt-10">
-            <Link
-              href={signinAs(CUSTOMER)}
+            <SigninTrigger
+              email={CUSTOMER}
               className="inline-flex items-center gap-2 h-12 px-8 rounded-full bg-[#c17e5c] hover:bg-[#b06f4e] text-white font-semibold transition"
             >
               Order online <ArrowRight className="h-4 w-4" />
-            </Link>
+            </SigninTrigger>
           </div>
         </div>
       </section>
