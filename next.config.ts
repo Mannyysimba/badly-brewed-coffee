@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
     ],
   },
   serverExternalPackages: ["better-sqlite3"],
+  // Ship the seeded SQLite DB file into every serverless function bundle
+  // so /tmp can seed itself on cold start (see src/lib/db/client.ts).
+  outputFileTracingIncludes: {
+    "/**/*": ["./data/bbc.db"],
+  },
 };
 
 export default nextConfig;

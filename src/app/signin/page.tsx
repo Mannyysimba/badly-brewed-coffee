@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, Suspense, useEffect, useRef } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -11,20 +11,21 @@ function SignInInner() {
   const params = useSearchParams();
   const router = useRouter();
   const prefill = params.get("prefill") ?? "";
+  const auto = params.get("auto") === "1";
   const callbackUrl = params.get("callbackUrl") ?? "/";
 
   const [email, setEmail] = useState(prefill);
   const [password, setPassword] = useState(prefill ? prefill.split("@")[0] : "");
   const [err, setErr] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(auto);
+  const autoTriggered = useRef(false);
 
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
+  async function doSignIn(emailArg: string, passwordArg: string) {
     setErr(null);
     setLoading(true);
     const res = await signIn("credentials", {
-      email,
-      password,
+      email: emailArg,
+      password: passwordArg,
       redirect: false,
     });
     setLoading(false);
@@ -34,6 +35,30 @@ function SignInInner() {
     }
     router.push(callbackUrl === "/" ? "/" : callbackUrl);
     router.refresh();
+  }
+
+  useEffect(() => {
+    if (auto && prefill && !autoTriggered.current) {
+      autoTriggered.current = true;
+      doSignIn(prefill, prefill.split("@")[0]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auto, prefill]);
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    doSignIn(email, password);
+  }
+
+  if (auto && loading && !err) {
+    return (
+      <main className="bean-bg min-h-screen flex items-center justify-center px-5">
+        <div className="flex flex-col items-center gap-4 text-center">
+          <Coffee className="h-8 w-8 text-[var(--color-coffee)] animate-pulse" />
+          <p className="text-sm text-muted">Brewing your session as {prefill}…</p>
+        </div>
+      </main>
+    );
   }
 
   return (

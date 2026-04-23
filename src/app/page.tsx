@@ -14,7 +14,7 @@ import {
 
 const CUSTOMER = "customer@test.com";
 const signinAs = (email: string) =>
-  `/signin?prefill=${encodeURIComponent(email)}`;
+  `/signin?prefill=${encodeURIComponent(email)}&auto=1`;
 
 const TEAM_ROLES = [
   { label: "Customer", email: "customer@test.com" },

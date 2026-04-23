@@ -2,7 +2,8 @@ node_modules
 .next
 .env
 .env.local
-data/*.db
+# Ship the seeded demo DB (data/bbc.db) so Vercel has users to sign in against.
+# Side files (WAL/shm) stay ignored — they're runtime-only.
 data/*.db-journal
 data/*.db-wal
 data/*.db-shm
