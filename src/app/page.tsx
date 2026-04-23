@@ -18,10 +18,10 @@ const signinAs = (email: string) =>
   `/signin?prefill=${encodeURIComponent(email)}&auto=1`;
 
 const TEAM_ROLES = [
-  { label: "Customer", email: "customer@test.com" },
-  { label: "Barista", email: "barista@test.com" },
-  { label: "Manager", email: "manager@test.com" },
-  { label: "Admin", email: "admin@test.com" },
+  { label: "Customer", email: "customer@test.com", redirect: "/shop" },
+  { label: "Barista", email: "barista@test.com", redirect: "/barista" },
+  { label: "Manager", email: "manager@test.com", redirect: "/dashboard" },
+  { label: "Admin", email: "admin@test.com", redirect: "/dashboard" },
 ];
 
 const DRINKS = [
@@ -363,16 +363,18 @@ export default async function HomePage() {
           </p>
           <div className="mt-5 flex flex-wrap gap-2 justify-center">
             {TEAM_ROLES.map((r) => (
-              <Link
+              <SigninTrigger
                 key={r.email}
-                href={signinAs(r.email)}
+                email={r.email}
+                redirectTo={r.redirect}
+                roleLabel={r.label}
                 className="inline-flex items-center gap-1.5 h-9 px-4 rounded-full border border-white/15 hover:border-white/40 text-[12.5px] text-white/75 hover:text-white transition"
               >
                 {r.label}
                 <span className="text-white/30 text-[10px] font-mono hidden sm:inline">
                   {r.email.split("@")[0]}
                 </span>
-              </Link>
+              </SigninTrigger>
             ))}
           </div>
         </div>

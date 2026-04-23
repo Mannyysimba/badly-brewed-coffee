@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { X, ArrowRight, Coffee } from "lucide-react";
 
 type Props = {
@@ -10,6 +9,7 @@ type Props = {
   className?: string;
   email?: string;
   redirectTo?: string;
+  roleLabel?: string;
 };
 
 export function SigninTrigger({
@@ -17,6 +17,7 @@ export function SigninTrigger({
   className,
   email = "customer@test.com",
   redirectTo = "/shop",
+  roleLabel,
 }: Props) {
   const [open, setOpen] = useState(false);
   return (
@@ -28,6 +29,7 @@ export function SigninTrigger({
         <SigninModal
           defaultEmail={email}
           redirectTo={redirectTo}
+          roleLabel={roleLabel}
           onClose={() => setOpen(false)}
         />
       )}
@@ -38,13 +40,14 @@ export function SigninTrigger({
 function SigninModal({
   defaultEmail,
   redirectTo,
+  roleLabel,
   onClose,
 }: {
   defaultEmail: string;
   redirectTo: string;
+  roleLabel?: string;
   onClose: () => void;
 }) {
-  const router = useRouter();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState(defaultEmail);
   const [password, setPassword] = useState(defaultEmail.split("@")[0] || "customer");
@@ -71,13 +74,15 @@ function SigninModal({
       password: password || "x",
       redirect: false,
     });
-    setLoading(false);
     if (res?.error) {
+      setLoading(false);
       setErr("Something went wrong. Try again.");
       return;
     }
-    router.push(redirectTo);
-    router.refresh();
+    // Full page load so the server-side session check picks up the new
+    // cookie. router.push + refresh can race with the cookie write and
+    // drop you back on the landing — window.location never does.
+    window.location.assign(redirectTo);
   }
 
   return (
@@ -104,7 +109,11 @@ function SigninModal({
         </div>
 
         <h2 className="font-display text-2xl leading-tight">
-          {mode === "signin" ? (
+          {roleLabel ? (
+            <>
+              Sign in as <em className="italic text-[#e8bfa0]">{roleLabel}.</em>
+            </>
+          ) : mode === "signin" ? (
             <>
               Welcome <em className="italic text-[#e8bfa0]">back.</em>
             </>
@@ -115,7 +124,9 @@ function SigninModal({
           )}
         </h2>
         <p className="text-[13px] text-white/55 mt-1">
-          {mode === "signin"
+          {roleLabel
+            ? `Demo shortcut — credentials are pre-filled, just hit sign in.`
+            : mode === "signin"
             ? "Sign in to order beans and track your stamps."
             : "One minute, then the good coffee is yours."}
         </p>
@@ -189,37 +200,39 @@ function SigninModal({
           </button>
         </form>
 
-        <p className="text-center text-[12px] text-white/50 mt-5">
-          {mode === "signin" ? (
-            <>
-              New here?{" "}
-              <button
-                type="button"
-                onClick={() => {
-                  setMode("signup");
-                  setErr(null);
-                }}
-                className="text-[#e8bfa0] hover:text-white font-semibold"
-              >
-                Create an account
-              </button>
-            </>
-          ) : (
-            <>
-              Already brewing with us?{" "}
-              <button
-                type="button"
-                onClick={() => {
-                  setMode("signin");
-                  setErr(null);
-                }}
-                className="text-[#e8bfa0] hover:text-white font-semibold"
-              >
-                Sign in
-              </button>
-            </>
-          )}
-        </p>
+        {!roleLabel && (
+          <p className="text-center text-[12px] text-white/50 mt-5">
+            {mode === "signin" ? (
+              <>
+                New here?{" "}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMode("signup");
+                    setErr(null);
+                  }}
+                  className="text-[#e8bfa0] hover:text-white font-semibold"
+                >
+                  Create an account
+                </button>
+              </>
+            ) : (
+              <>
+                Already brewing with us?{" "}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMode("signin");
+                    setErr(null);
+                  }}
+                  className="text-[#e8bfa0] hover:text-white font-semibold"
+                >
+                  Sign in
+                </button>
+              </>
+            )}
+          </p>
+        )}
       </div>
     </div>
   );
