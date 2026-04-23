@@ -10,3 +10,9 @@ drizzle/
 next-env.d.ts
 .DS_Store
 *.tsbuildinfo
+
+# Team 17 — raw source assets (design drop). The versions used at runtime
+# are copied into /public; keep the originals off the repo to avoid bloat.
+/asset/
+/Team_*.pdf
+

@@ -13,7 +13,10 @@ export default auth((req) => {
     publicPaths.includes(path) ||
     path.startsWith("/api/auth") ||
     path.startsWith("/_next") ||
-    path.startsWith("/favicon");
+    path.startsWith("/favicon") ||
+    path.startsWith("/images/") ||
+    path.startsWith("/fonts/") ||
+    /\.(svg|png|jpg|jpeg|webp|ico|otf|woff2?|ttf)$/i.test(path);
 
   if (isPublic) return NextResponse.next();
 

@@ -14,8 +14,8 @@
   --color-warn: #d18f2c;
   --color-err: #c44a3a;
 
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-display: "Fraunces", "Playfair Display", Georgia, serif;
+  --font-sans: var(--font-sans, "Coolvetica"), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-display, "Fraunces"), Georgia, serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
 
   --radius-sm: 6px;
