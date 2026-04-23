@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bisque: #f5e9da;
+  --color-cream: #fbf6ef;
+  --color-terracotta: #c5704a;
+  --color-coffee: #6f4e37;
+  --color-coffee-dark: #4a3425;
+  --color-coffee-light: #a87858;
+  --color-ink: #2a1f17;
+  --color-mute: #8a7866;
+  --color-line: #e8dcc9;
+  --color-ok: #3f9d6c;
+  --color-warn: #d18f2c;
+  --color-err: #c44a3a;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Fraunces", "Playfair Display", Georgia, serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+}
+
+@layer base {
+  :root {
+    --bg: var(--color-cream);
+    --bg-elev: #ffffff;
+    --fg: var(--color-ink);
+    --muted: var(--color-mute);
+    --accent: var(--color-coffee);
+    --accent-fg: #fff;
+    --border: var(--color-line);
+    color-scheme: light;
+  }
+
+  :root.dark {
+    --bg: #1a130e;
+    --bg-elev: #221812;
+    --fg: #f5e9da;
+    --muted: #a89784;
+    --accent: #c5704a;
+    --accent-fg: #1a130e;
+    --border: #38291e;
+    color-scheme: dark;
+  }
+
+  html,
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  * {
+    border-color: var(--border);
+  }
+
+  ::selection {
+    background: var(--color-terracotta);
+    color: #fff;
+  }
+}
+
+@layer utilities {
+  .bg-app { background-color: var(--bg); }
+  .bg-elev { background-color: var(--bg-elev); }
+  .text-fg { color: var(--fg); }
+  .text-muted { color: var(--muted); }
+  .border-app { border-color: var(--border); }
+  .bg-accent { background-color: var(--accent); }
+  .text-accent { color: var(--accent); }
+  .text-accent-fg { color: var(--accent-fg); }
+  .font-display { font-family: var(--font-display); }
+  .font-mono { font-family: var(--font-mono); }
+
+  .card {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  .bean-bg {
+    background:
+      radial-gradient(1200px 400px at 10% -10%, color-mix(in oklab, var(--color-terracotta) 18%, transparent), transparent 60%),
+      radial-gradient(800px 300px at 90% 0%, color-mix(in oklab, var(--color-coffee) 15%, transparent), transparent 60%),
+      var(--bg);
+  }
+}
+
+/* Chart theming for Recharts */
+.recharts-cartesian-axis-tick text { fill: var(--muted); font-size: 11px; }
+.recharts-cartesian-grid line { stroke: var(--border); }
+.recharts-default-tooltip {
+  background: var(--bg-elev) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 10px !important;
+  font-size: 12px;
+}
