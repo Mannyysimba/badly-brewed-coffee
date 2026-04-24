@@ -1,15 +1,14 @@
 "use client";
 
 import { useState, Suspense, useEffect, useRef } from "react";
-import { signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { signIn, signOut } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button, Card, CardTitle, CardDescription, Input, Label } from "@/components/ui";
 import { Coffee } from "lucide-react";
 
 function SignInInner() {
   const params = useSearchParams();
-  const router = useRouter();
   const prefill = params.get("prefill") ?? "";
   const auto = params.get("auto") === "1";
   const callbackUrl = params.get("callbackUrl") ?? "/";
@@ -23,18 +22,20 @@ function SignInInner() {
   async function doSignIn(emailArg: string, passwordArg: string) {
     setErr(null);
     setLoading(true);
+    // Clear any lingering session so role-gates don't bounce us to the wrong dashboard.
+    await signOut({ redirect: false });
     const res = await signIn("credentials", {
       email: emailArg,
       password: passwordArg,
       redirect: false,
     });
     setLoading(false);
-    if (res?.error) {
+    if (res?.error || !res?.ok) {
       setErr("Wrong email or password.");
       return;
     }
-    router.push(callbackUrl === "/" ? "/" : callbackUrl);
-    router.refresh();
+    // Hard navigation so the freshly-set cookie is sent on the next request.
+    window.location.assign(callbackUrl === "/" ? "/" : callbackUrl);
   }
 
   useEffect(() => {

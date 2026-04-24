@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { signIn } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import { X, ArrowRight, Coffee } from "lucide-react";
 
 type Props = {
@@ -69,12 +69,17 @@ function SigninModal({
     e.preventDefault();
     setErr(null);
     setLoading(true);
+    // Clear any existing session first. Without this, clicking a different
+    // role button (e.g. Customer after Manager) races the old cookie with
+    // window.location.assign, and the role-gates in /shop and /barista
+    // layouts bounce you back to the wrong dashboard.
+    await signOut({ redirect: false });
     const res = await signIn("credentials", {
       email,
       password: password || "x",
       redirect: false,
     });
-    if (res?.error) {
+    if (res?.error || !res?.ok) {
       setLoading(false);
       setErr("Something went wrong. Try again.");
       return;
